@@ -17,14 +17,14 @@ class nrpause : public er::CS::CSEzTask {
     bool hotkey_pressed{false};
 
     // Settings from the nrpause.ini file
-    bool map_menu{true};
-    bool equipment_menu{false};
-    bool status_menu{false};
-    bool system_menu{true};
-    bool shops{false};
-    bool dialog{false};
-    bool dormant_power{false};
-    bool hotkey{true};
+    bool pause_in_map_menu{true};
+    bool pause_in_equipment_menu{false};
+    bool pause_in_status_menu{false};
+    bool pause_in_system_menu{true};
+    bool pause_in_shops{false};
+    bool pause_in_dialog{false};
+    bool pause_in_dormant_power{false};
+    bool toggle_on_hotkey{true};
 
 public:
     nrpause(filesystem::path ini_path) {
@@ -32,14 +32,14 @@ public:
         mINI::INIStructure ini;
         if (ini_file.read(ini)) {
             auto &config = ini["nrpause"];
-            map_menu = config["map_menu"] != "false";
-            equipment_menu = config["equipment_menu"] != "false";
-            status_menu = config["status_menu"] != "false";
-            system_menu = config["system_menu"] != "false";
-            shops = config["shops"] != "false";
-            dialog = config["dialog"] != "false";
-            dormant_power = config["dormant_power"] != "false";
-            hotkey = config["hotkey"] != "false";
+            pause_in_map_menu = config["map_menu"] != "false";
+            pause_in_equipment_menu = config["equipment_menu"] != "false";
+            pause_in_status_menu = config["status_menu"] != "false";
+            pause_in_system_menu = config["system_menu"] != "false";
+            pause_in_shops = config["shops"] != "false";
+            pause_in_dialog = config["dialog"] != "false";
+            pause_in_dormant_power = config["dormant_power"] != "false";
+            toggle_on_hotkey = config["hotkey"] != "false";
         }
     }
 
@@ -63,17 +63,17 @@ public:
         // indicates a tutorial is open. This causes various game systems to temporarily stop,
         // since tutorials normally pause the game.
         tutorial_lightbox_state.enabled =
-            (map_menu && (is_visible(er::CS::menu_flag::map_menu) ||
-                          is_visible(er::CS::menu_flag::roundtable_map))) ||
-            (equipment_menu && is_visible(er::CS::menu_flag::equipment_menu)) ||
-            (status_menu && is_visible(er::CS::menu_flag::status_menu)) ||
-            (system_menu && (is_visible(er::CS::menu_flag::system_menu) ||
-                             is_visible(er::CS::menu_flag::system_menu_controls))) ||
-            (shops && is_visible(er::CS::menu_flag::shop)) ||
-            (dialog && is_visible(er::CS::menu_flag::talk_list)) ||
-            (dormant_power && is_visible(er::CS::menu_flag::dormant_power));
+            (pause_in_map_menu && (is_visible(er::CS::menu_flag::map_menu) ||
+                                   is_visible(er::CS::menu_flag::roundtable_map))) ||
+            (pause_in_equipment_menu && is_visible(er::CS::menu_flag::equipment_menu)) ||
+            (pause_in_status_menu && is_visible(er::CS::menu_flag::status_menu)) ||
+            (pause_in_system_menu && (is_visible(er::CS::menu_flag::system_menu) ||
+                                      is_visible(er::CS::menu_flag::system_menu_controls))) ||
+            (pause_in_shops && is_visible(er::CS::menu_flag::shop)) ||
+            (pause_in_dialog && is_visible(er::CS::menu_flag::talk_list)) ||
+            (pause_in_dormant_power && is_visible(er::CS::menu_flag::dormant_power));
 
-        if (hotkey) {
+        if (toggle_on_hotkey) {
             // When F9 is pressed, flip the current pause state from unpaused to paused or vice
             // versa
             if (GetAsyncKeyState(VK_F9) & 1) {
