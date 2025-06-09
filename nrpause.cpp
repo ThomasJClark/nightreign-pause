@@ -24,7 +24,6 @@ class nrpause : public er::CS::CSEzTask {
     bool shops{false};
     bool dialog{false};
     bool dormant_power{false};
-    bool inspecting_item{false};
     bool hotkey{true};
 
 public:
@@ -40,7 +39,6 @@ public:
             shops = config["shops"] != "false";
             dialog = config["dialog"] != "false";
             dormant_power = config["dormant_power"] != "false";
-            inspecting_item = config["inspecting_item"] != "false";
             hotkey = config["hotkey"] != "false";
         }
     }
@@ -73,8 +71,7 @@ public:
                              is_visible(er::CS::menu_flag::system_menu_controls))) ||
             (shops && is_visible(er::CS::menu_flag::shop)) ||
             (dialog && is_visible(er::CS::menu_flag::talk_list)) ||
-            (dormant_power && is_visible(er::CS::menu_flag::dormant_power)) ||
-            (inspecting_item && is_visible(er::CS::menu_flag::pick_up_item));
+            (dormant_power && is_visible(er::CS::menu_flag::dormant_power));
 
         if (hotkey) {
             // When F9 is pressed, flip the current pause state from unpaused to paused or vice
