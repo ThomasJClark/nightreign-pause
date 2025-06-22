@@ -28,8 +28,8 @@ class nrpause : public er::CS::CSEzTask {
 
 public:
     nrpause(filesystem::path ini_path) {
-        mINI::INIFile ini_file(ini_path.string());
-        mINI::INIStructure ini;
+        auto ini_file = mINI::INIFile{ini_path};
+        auto ini = mINI::INIStructure{};
         if (ini_file.read(ini)) {
             auto &config = ini["nrpause"];
             pause_in_map_menu = config["map_menu"] != "false";
@@ -92,9 +92,9 @@ bool WINAPI DllMain(HINSTANCE hinst, unsigned int reason, void *reserved) {
     if (reason == DLL_PROCESS_ATTACH) {
         wchar_t dll_filename[MAX_PATH] = {0};
         GetModuleFileNameW(hinst, dll_filename, MAX_PATH);
+        auto mod_folder = filesystem::path{dll_filename}.parent_path();
 
-        static auto mod_task =
-            nrpause{filesystem::path(dll_filename).parent_path() / "nrpause.ini"};
+        static auto mod_task = nrpause{mod_folder / "nrpause.ini"};
 
         static auto mod_thread = thread{[]() {
             modutils::initialize();
