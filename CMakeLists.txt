@@ -5,7 +5,7 @@ set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_INTERPROCEDURAL_OPTIMIZATION TRUE)
 
 project(nrpause
-  VERSION   "1.0.0"
+  VERSION   "1.0.1"
   LANGUAGES CXX)
 
 include(FetchContent)
@@ -36,6 +36,7 @@ add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
   COMMAND ${CMAKE_COMMAND} -E copy -t $<TARGET_FILE_DIR:${PROJECT_NAME}>
   ${CMAKE_SOURCE_DIR}/LICENSE.txt
   ${CMAKE_SOURCE_DIR}/nrpause.ini
+  ${CMAKE_SOURCE_DIR}/nrpause.me3
   COMMAND_EXPAND_LISTS)
 
 target_link_libraries(${PROJECT_NAME} PRIVATE mINI elden-x)
