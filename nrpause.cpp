@@ -65,7 +65,8 @@ public:
         tutorial_lightbox_state.enabled =
             (pause_in_map_menu && (is_visible(er::CS::menu_flag::map_menu) ||
                                    is_visible(er::CS::menu_flag::roundtable_map))) ||
-            (pause_in_equipment_menu && is_visible(er::CS::menu_flag::equipment_menu)) ||
+            (pause_in_equipment_menu && (is_visible(er::CS::menu_flag::equipment_menu) ||
+                                         is_visible(er::CS::menu_flag::select_equip_slot))) ||
             (pause_in_status_menu && is_visible(er::CS::menu_flag::status_menu)) ||
             (pause_in_system_menu && (is_visible(er::CS::menu_flag::system_menu) ||
                                       is_visible(er::CS::menu_flag::system_menu_controls))) ||
